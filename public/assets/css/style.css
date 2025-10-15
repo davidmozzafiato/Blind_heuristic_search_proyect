@@ -1,0 +1,4 @@
+/* Puedes eliminar la clase .visited y la animación @keyframes pop si lo deseas */
+.path {
+    background-color: #ffeb3b; /* Amarillo para el estado final de la ruta */
+}

@@ -11,8 +11,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+		<link rel="stylesheet" href="/assets/css/style.css">
 	</head>
 	<body class="is-preload">
+		<script src="/assets/js/script.js" defer></script>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -24,16 +27,17 @@
 						</div>
 						<div class="content">
 							<div class="inner">
-								<h1>Búsquedas</h1>
-								<p>Algoritmo A* implementado en JavaScript<br />
-								Por David Pinto y Vanessa Reyes</p>
+								<h1>Búsquedas ciegas</h1>
+								<p>Algoritmo A* implementado en JavaScript<br /></p>
 							</div>
 						</div>
 						<nav>
 							<ul>
-								<li><a href="#intro">Intro</a></li>
-								<li><a href="#work">Work</a></li>
+								<li><a href="#problema">Problema</a></li>
+								<li><a href="#algoritmo">Algoritmo</a></li>
 								<li><a href="#about">About</a></li>
+								<li><a href="#contact">Contact</a></li>
+
 								<li><a href="#contact">Contact</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
@@ -44,33 +48,70 @@
 					<div id="main">
 
 						<!-- Intro -->
-							<article id="intro">
-								<h2 class="major">Work</h2>
+							<article id="problema">
+								<h2 class="major">Problema</h2>
 								<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
-								<p>Adipiscing magna sed dolor elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices.</p>
-								<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet feugiat tempus.</p>
-								
-							</article>
+								<p>Se trata de un laberinto que representa un cuarto con obstáculos donde está un
+								Perro robot, lo va a recorrer desde un estado inicial a un estado meta, el
+								programa le busca la ruta que debe seguir.
+								El cuarto se va a representar por coordenadas (renglón, columna)
+								El estado inicial y meta se indican por medio de sus coordenadas.
+								Ejemplo: inicio: (2,0) y meta (5,1)
+								Los movimientos u operadores son : arriba, abajo, izquierda y derecha.
+								Los obstáculos también tienen una coordenada cada uno.
+								LA heurística es la distancia de Manhattan</p>
+								</article>
 
 						<!-- Work -->
-							<article id="work">
-								<h1>Prueba del Algoritmo A*</h1>
+							<article id="algoritmo">
+								<h1 class="major">Algoritmo</h1>
+
+								<h2>Amplitud</h2>
 								<div class="controls">
-									<button id="run-astar-btn">Ejecutar A*</button>
+									<button id="run-Amplitud">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
-									<h2>Resultados:</h2>
-									<pre id="path-result"></pre>
+									<h3>Resultados:</h3>
+									<p id="amplitud-result"></p>
 								</div>
-								<script src="/assets/js/script.js" defer></script>
+
+								<h2>Profundidad</h2>
+								<div class="controls">
+									<button id="run-Profundidad">Ejecutar algoritmo</button>
+								</div>
+								<div id="grid-container"></div>
+								<div class="results">
+									<h3>Resultados:</h3>
+									<p id="profundidad-result"></p>
+								</div>
+
+								<h2>A*</h2>
+								<div class="controls">
+									<button id="run-astar-btn">Ejecutar algoritmo</button>
+								</div>
+								<div id="grid-container"></div>
+								<div class="results">
+									<h3>Resultados:</h3>
+									<p id="path-result"></p>
+								</div>
+
+								<h2>Primero el mejor</h2>
+								<div class="controls">
+									<button id="run-PrimeroElMejor">Ejecutar algoritmo</button>
+								</div>
+								<div id="grid-container"></div>
+								<div class="results">
+									<h3>Resultados:</h3>
+									<p id="primero-el-mejor-result"></p>
+								</div>
 							</article>
 
 						<!-- About -->
 							<article id="about">
 								<h2 class="major">About</h2>
 								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-								<p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p>
+								<p>Por David Pinto y Vanessa Reyes.</p>
 							</article>
 
 						<!-- Contact -->
