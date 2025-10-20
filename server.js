@@ -1,14 +1,19 @@
 const express = require('express');
 const path = require('path');
-const { astar, Node } = require('./Astar.js'); // Solo importamos A*
+
+// 1. Importa TODOS tus algoritmos
+const { astar, Node } = require('./astar.js'); // Asume que Node se exporta desde astar.js
+const { bfs } = require('./amplitud.js');
+const { dfs } = require('./profundidad.js');
+const { bestFirstSearch } = require('./primeromejor.js');
 
 const app = express();
-const PORT = 3003;
+const PORT = 3000;
 
-// Sirve los archivos de la carpeta 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+// 2. Sirve tu front-end (la carpeta 'public' donde estarán index.html y script.js)
+app.use(express.static('public'));
 
-// Definición del cuarto
+// 3. Define el laberinto en el servidor
 const cuartoTemplate = [
     [".", ".", "."], [".", "#", "."], ["S", "#", "."],
     ["#", ".", "."], [".", ".", "#"], [".", "M", "."]
@@ -29,16 +34,34 @@ function crearGrid() {
     return { grid, startNode, endNode };
 }
 
-// ÚNICA RUTA DE API: Solo para A*
-app.get('/api/run/astar', (req, res) => {
-    console.log("LOG DEL SERVIDOR: Petición recibida en /api/run/astar");
+// 4. Crea la API para que el front-end la llame
+app.get('/api/run/:algorithm', (req, res) => {
+    const { algorithm } = req.params;
+    console.log(`Petición recibida para ejecutar: ${algorithm}`);
+    
     const { grid, startNode, endNode } = crearGrid();
-    const result = astar(grid, startNode, endNode);
-    console.log("LOG DEL SERVIDOR: Algoritmo A* ejecutado. Enviando resultado.");
-    res.json(result);
+    let result;
+
+    switch (algorithm) {
+        case 'astar':
+            result = astar(grid, startNode, endNode);
+            break;
+        case 'bfs':
+            result = bfs(grid, startNode, endNode);
+            break;
+        case 'dfs':
+            result = dfs(grid, startNode, endNode);
+            break;
+        case 'bestFirstSearch':
+            result = bestFirstSearch(grid, startNode, endNode);
+            break;
+        default:
+            return res.status(400).json({ error: 'Algoritmo no válido' });
+    }
+    
+    res.json(result); // Envía el resultado como JSON al navegador
 });
 
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    console.log("Abre esta URL en tu navegador.");
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

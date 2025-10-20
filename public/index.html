@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 		<link rel="stylesheet" href="/assets/css/style.css">
@@ -23,7 +24,7 @@
 				<!-- Header fa-solid fa-magnifying-glass-location -->
 					<header id="header">
 						<div class="logo">
-							<span class="icon fa-gem"></span>
+							<i class="icon fas fa-search-location fa-2x"></i>
 						</div>
 						<div class="content">
 							<div class="inner">
@@ -33,13 +34,17 @@
 						</div>
 						<nav>
 							<ul>
-								<li><a href="#problema">Problema</a></li>
-								<li><a href="#algoritmo">Algoritmo</a></li>
-								<li><a href="#about">About</a></li>
-								<li><a href="#contact">Contact</a></li>
-
-								<li><a href="#contact">Contact</a></li>
-								<!--<li><a href="#elements">Elements</a></li>-->
+								<li><a href="#problema">problema</a></li>
+								<li><a href="#comparativa">comparativa</a></li>
+								<li><a href="#contact">contacto</a></li>
+							</ul>
+						</nav>
+						<nav>
+							<ul>
+								<li><a href="#amplitud">Amplitud</a></li>
+								<li><a href="#profundidad">Profundidad</a></li>
+								<li><a href="#astar">A*</a></li>
+								<li><a href="#primero-el-mejor">Primero el mejor</a></li>
 							</ul>
 						</nav>
 					</header>
@@ -50,7 +55,7 @@
 						<!-- Intro -->
 							<article id="problema">
 								<h2 class="major">Problema</h2>
-								<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
+								<img src="images/dogRobot.png" alt="Perro robot" class="imagen-pequena">
 								<p>Se trata de un laberinto que representa un cuarto con obstáculos donde está un
 								Perro robot, lo va a recorrer desde un estado inicial a un estado meta, el
 								programa le busca la ruta que debe seguir.
@@ -62,48 +67,55 @@
 								LA heurística es la distancia de Manhattan</p>
 								</article>
 
-						<!-- Work -->
-							<article id="algoritmo">
-								<h1 class="major">Algoritmo</h1>
-
-								<h2>Amplitud</h2>
+						<!-- Amplitud -->
+							<article id="amplitud">
+								<h1 class="major">Búsqueda en Amplitud (BFS)</h1>
 								<div class="controls">
-									<button id="run-Amplitud">Ejecutar algoritmo</button>
+									<button id="run-bfs-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="amplitud-result"></p>
+									<p id="path-result-bfs"></p>
 								</div>
+							</article>
 
-								<h2>Profundidad</h2>
+							<!-- Profundidad -->
+							<article id="profundidad">
+								<h1 class="major">Búsqueda en Profundidad (DFS)</h1>
 								<div class="controls">
-									<button id="run-Profundidad">Ejecutar algoritmo</button>
+									<button id="run-dfs-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="profundidad-result"></p>
+									<p id="path-result-dfs"></p>
 								</div>
+							</article>
 
-								<h2>A*</h2>
+							<!-- Astar -->
+							<article id="astar">
+								<h1 class="major">A*</h1>
 								<div class="controls">
 									<button id="run-astar-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="path-result"></p>
+									<p id="path-result-astar"></p>
 								</div>
+							</article>
 
-								<h2>Primero el mejor</h2>
+							<!-- Primero el mejor -->
+							<article id="primero-el-mejor">
+								<h1 class="major">Búsqueda Primero el Mejor</h1>
 								<div class="controls">
-									<button id="run-PrimeroElMejor">Ejecutar algoritmo</button>
+									<button id="run-bestfirst-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="primero-el-mejor-result"></p>
+									<p id="path-result-bestfirst"></p>
 								</div>
 							</article>
 
@@ -138,10 +150,8 @@
 									</ul>
 								</form>
 								<ul class="icons">
-									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="https://www.instagram.com/david_mozzafiato/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="https://github.com/davidmozzafiato" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 								</ul>
 							</article>
 
@@ -391,7 +401,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 
 				<!-- Footer -->
 					<footer id="footer">
-						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						<p class="copyright">&copy; Inteligencia Artificial. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
 					</footer>
 
 			</div>
