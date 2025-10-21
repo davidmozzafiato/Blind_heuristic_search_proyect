@@ -58,5 +58,107 @@
 	font-size: 1.1rem; /* Un poco más grande para que resalte */
 }
 
+/* --------------------------------------------------------------------------------------- /*
 
-/* --- FIN DE NUEVOS ESTILOS --- */
+/* 1. CONTENEDORES DEL GRID */
+/* Esto aplica a los 4 divs: grid-bfs, grid-dfs, etc. */
+.grid-display {
+    display: grid;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* script.js define el número de columnas y el ancho de 40px */
+}
+
+/* 2. CELDA BASE (LA MÁS IMPORTANTE) */
+/* Esto aplica a CADA celda de la cuadrícula */
+.cell {
+    width: 40px;
+    height: 40px;
+    
+    /* Centra los círculos (::before) que dibujaremos dentro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Limpieza de estilos de la plantilla */
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    
+    /* Borde suave para que se vea la cuadrícula */
+    box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.1);
+    
+    /* Necesario para que z-index funcione */
+    position: relative; 
+}
+
+/* 3. OBSTÁCULOS (ROJO) */
+.cell.wall {
+    background-color: rgba(178, 34, 34, 0.7) !important; /* Rojo ladrillo */
+    box-shadow: inset 0 0 0 1px rgba(139, 0, 0, 0.9);
+    border-radius: 4px;
+    z-index: 5; /* Nivel de capa 5 */
+}
+
+/* 4. RUTA (VERDE) */
+/* Dibuja la bola VERDE dentro de las celdas .path */
+.cell.path::before {
+    content: ''; /* ¡Importante! Esto crea el elemento */
+    width: 25px; 
+    height: 25px;
+    background-color: rgba(76, 175, 80, 0.7) !important; /* Verde */
+    border-radius: 50%;
+    box-shadow: 0 0 5px 1px rgba(76, 175, 80, 0.9);
+    
+    /* Nivel de capa 10 (Encima del muro, debajo de S y M) */
+    z-index: 10; 
+}
+
+/* 5. INICIO (S) Y DESTINO (M) */
+
+/* Base para los círculos de S y M */
+.cell.start::before,
+.cell.end::before {
+    /* --- ¡NUEVO! --- Configuración de Font Awesome --- */
+    /* Asegúrate de usar la familia de fuentes correcta */
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Solid"; 
+    /* 900 es el peso para los iconos sólidos */
+    font-weight: 900; 
+    
+    /* Crean el círculo y centran el icono */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 30px; 
+    height: 30px;
+    border-radius: 50%;
+    
+    /* Estilo del icono (ajustamos el tamaño) */
+    font-size: 0.9em; /* Un poco más pequeño que la letra */
+    color: #ffffff;
+    
+    /* Nivel de capa 20 (¡Por encima de todo!) */
+    z-index: 20; 
+}
+
+/* Color e icono para INICIO (S) */
+.cell.start::before {
+    content: '\f04b'; /* --- ¡CAMBIADO! --- Icono de "play" */
+    background-color: rgba(65, 105, 225, 0.9) !important; /* Azul */
+    box-shadow: 0 0 5px 1px rgba(65, 105, 225, 1);
+}
+
+/* Color e icono para DESTINO (M) */
+.cell.end::before {
+    content: '\f11e'; /* --- ¡CAMBIADO! --- Icono de "bandera de meta" */
+    background-color: rgba(147, 112, 219, 0.9) !important; /* Morado */
+    box-shadow: 0 0 5px 1px rgba(147, 112, 219, 1);
+}
+
+/* 6. LIMPIEZA DE CONFLICTOS */
+/* Oculta cualquier círculo (verde, azul, morado) si está en una pared */
+.cell.wall::before {
+    display: none !important;
+}
