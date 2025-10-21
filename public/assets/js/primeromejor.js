@@ -59,11 +59,10 @@ function getNeighbors(grid, node) {
     const rows = grid.length;
     const cols = grid[0].length;
 
-    if (y > 0) neighbors.push(grid[y - 1][x]);
-    if (y < rows - 1) neighbors.push(grid[y + 1][x]);
-    if (x > 0) neighbors.push(grid[y][x - 1]);
-    if (x < cols - 1) neighbors.push(grid[y][x + 1]);
-
+    if (x > 0) neighbors.push(grid[y][x - 1]);          // Izquierda
+    if (y > 0) neighbors.push(grid[y - 1][x]);          // Arriba
+    if (x < cols - 1) neighbors.push(grid[y][x + 1]);   // Derecha
+    if (y < rows - 1) neighbors.push(grid[y + 1][x]);   // Abajo
     return neighbors;
 }
 

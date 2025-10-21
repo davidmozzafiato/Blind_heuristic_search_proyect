@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
-const { astar, Node } = require('./Astar.js');
-const { bfs } = require('./amplitud.js');
-const { dfs } = require('./profundidad.js');
-const { bestFirstSearch } = require('./primeromejor.js');
-let cuartoTemplate = require('./laberinto.js');
+const { astar, Node } = require('./public/assets/js/Astar.js');
+const { bfs } = require('./public/assets/js/amplitud.js');
+const { dfs } = require('./public/assets/js/profundidad.js');
+const { bestFirstSearch } = require('./public/assets/js/primeromejor.js');
+let cuartoTemplate = require('./public/assets/js/laberinto.js');
 
 const app = express();
 const PORT = 3003;
