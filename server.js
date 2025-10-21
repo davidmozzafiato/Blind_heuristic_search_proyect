@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 // 1. Importa TODOS tus algoritmos
-const { astar, Node } = require('./astar.js'); // Asume que Node se exporta desde astar.js
+const { astar, Node } = require('./Astar.js'); // Asume que Node se exporta desde astar.js
 const { bfs } = require('./amplitud.js');
 const { dfs } = require('./profundidad.js');
 const { bestFirstSearch } = require('./primeromejor.js');
