@@ -4,21 +4,32 @@ const { astar, Node } = require('./public/assets/js/Astar.js');
 const { bfs } = require('./public/assets/js/amplitud.js');
 const { dfs } = require('./public/assets/js/profundidad.js');
 const { bestFirstSearch } = require('./public/assets/js/primeromejor.js');
-let cuartoTemplate = require('./public/assets/js/laberinto.js');
+
+// --- ¡CAMBIOS IMPORTANTES AQUÍ! ---
+
+// 1. Importa el laberinto predeterminado a una CONSTANTE (inmutable)
+//    (Asegúrate de que esta ruta a tu laberinto.js sea correcta)
+const defaultLaberinto = require('./public/assets/js/laberinto.js');
+
+// 2. Crea tu variable 'cuartoTemplate' (mutable) como una COPIA PROFUNDA
+//    Esto es VITAL para que no se modifique el original.
+let cuartoTemplate = JSON.parse(JSON.stringify(defaultLaberinto));
+
+// ------------------------------------
 
 const app = express();
 const PORT = 3003;
 
-// ...
 app.use(express.static('public'));
-app.use(express.json()); // <-- AÑADE ESTO (¡MUY IMPORTANTE!)
+app.use(express.json()); // Correcto
 
-// La API para que el frontend pida el laberinto (sin cambios)
+// API para pedir el laberinto (el ÚLTIMO GUARDADO)
 app.get('/api/grid', (req, res) => {
+    // Envía la variable mutable (la que puede cambiar)
     res.json(cuartoTemplate);
 });
 
-// --- AÑADE ESTA NUEVA RUTA 'POST' ---
+// API para GUARDAR un nuevo laberinto
 app.post('/api/grid', (req, res) => {
     const nuevoTemplate = req.body;
 
@@ -26,15 +37,25 @@ app.post('/api/grid', (req, res) => {
         // Actualiza el laberinto EN MEMORIA
         cuartoTemplate = nuevoTemplate; 
         console.log("Laberinto actualizado en el servidor:", cuartoTemplate);
-        // Envía el laberinto actualizado de vuelta al cliente
         res.json({ status: 'ok', grid: cuartoTemplate });
     } else {
         res.status(400).json({ error: 'Datos de grid inválidos' });
     }
 });
-// -------------------------------------
 
-// Esta función ahora usa el 'cuartoTemplate' importado
+// --- ¡ESTA ES LA RUTA QUE TE FALTA! ---
+/**
+ * NUEVO ENDPOINT:
+ * Ofrece el laberinto PREDETERMINADO (de laberinto.js)
+ */
+app.get('/api/grid/default', (req, res) => {
+    console.log("Enviando laberinto predeterminado...");
+    // Envía la constante original, que nunca cambia
+    res.json(defaultLaberinto);
+});
+// ---------------------------------------------
+
+// Esta función usa 'cuartoTemplate' (el guardado) para correr los algoritmos
 function crearGrid() {
     const rows = cuartoTemplate.length;
     const cols = cuartoTemplate[0].length;
@@ -50,7 +71,7 @@ function crearGrid() {
     return { grid, startNode, endNode };
 }
 
-// La API para correr los algoritmos (sin cambios)
+// API para correr los algoritmos (sin cambios)
 app.get('/api/run/:algorithm', (req, res) => {
     const { algorithm } = req.params;
     console.log(`Petición recibida para ejecutar: ${algorithm}`);
@@ -74,11 +95,9 @@ app.get('/api/run/:algorithm', (req, res) => {
         default:
             return res.status(400).json({ error: 'Algoritmo no válido' });
     }
-    
     res.json(result);
 });
 
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
-

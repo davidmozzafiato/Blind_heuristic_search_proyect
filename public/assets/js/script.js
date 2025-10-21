@@ -11,30 +11,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. SELECTORES DEL EDITOR ---
     const gridEditor = document.getElementById('grid-editor');
     const saveButton = document.getElementById('save-grid-btn');
+    const resetButton = document.getElementById('reset-grid-btn'); // Botón de reinicio
     const saveStatus = document.getElementById('save-status');
     const brushRadios = document.querySelectorAll('input[name="brush"]');
     let currentBrush = '#'; // Valor inicial (Pared)
 
     // --- 3. SELECTORES DE BOTONES Y RESULTADOS ---
-    // BFS (Amplitud)
     const runButtonBFS = document.getElementById('run-bfs-btn');
     const generatedResultBFS = document.getElementById('generated-result-bfs');
     const visitedResultBFS = document.getElementById('visited-result-bfs');
     const pathResultBFS = document.getElementById('path-result-bfs');
-
-    // DFS (Profundidad)
     const runButtonDFS = document.getElementById('run-dfs-btn');
     const generatedResultDFS = document.getElementById('generated-result-dfs');
     const visitedResultDFS = document.getElementById('visited-result-dfs');
     const pathResultDFS = document.getElementById('path-result-dfs');
-
-    // A*
     const runButtonAStar = document.getElementById('run-astar-btn');
     const generatedResultAStar = document.getElementById('generated-result-astar');
     const visitedResultAStar = document.getElementById('visited-result-astar');
     const pathResultAStar = document.getElementById('path-result-astar');
-
-    // Best-First (Primero el Mejor)
     const runButtonBestFirst = document.getElementById('run-bestfirst-btn');
     const generatedResultBestFirst = document.getElementById('generated-result-bestfirst');
     const visitedResultBestFirst = document.getElementById('visited-result-bestfirst');
@@ -48,12 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 5. FUNCIONES DE LÓGICA PRINCIPAL ---
 
     /**
-     * Pide el grid al servidor y luego lo dibuja
+     * Pide el grid GUARDADO al servidor y luego lo dibuja
      */
     async function inicializarGrid() {
         try {
-            console.log("PASO 2: Pidiendo grid al servidor...");
-            const response = await fetch('/api/grid');
+            console.log("PASO 2: Pidiendo grid GUARDADO al servidor...");
+            const response = await fetch('/api/grid'); // Pide el guardado
             if (!response.ok) {
                 throw new Error(`Error del servidor al cargar grid: ${response.status}`);
             }
@@ -63,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rows = cuartoTemplate.length;
             cols = cuartoTemplate[0].length;
 
-            // Dibuja los grids de algoritmos
             allGrids.forEach(container => {
                 if (container) {
                     container.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
@@ -71,11 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Dibuja el grid del EDITOR
             if (gridEditor) {
                 gridEditor.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
-                drawGrid(gridEditor); // Dibuja el grid en el editor
-                gridEditor.addEventListener('click', handleGridClick); // Añade listener de clic
+                drawGrid(gridEditor);
             }
 
         } catch (error) {
@@ -89,18 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawGrid(container) {
         if (!cuartoTemplate) return;
         
-        container.innerHTML = ''; // Limpia el grid
+        container.innerHTML = '';
         for (let y = 0; y < rows; y++) {
             for (let x = 0; x < cols; x++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 cell.id = `${container.id}-cell-${y}-${x}`;
                 
-                // --- ¡LÍNEAS AÑADIDAS! ---
-                // Almacena las coordenadas directamente en el elemento
                 cell.dataset.y = y;
                 cell.dataset.x = x;
-                // -------------------------
                 
                 const type = cuartoTemplate[y][x];
                 if (type === '#') cell.classList.add('wall');
@@ -129,8 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function drawPath(baseId, pathArray) {
         clearPath(baseId);
-        // console.log(`--- 🎨 Iniciando drawPath para: ${baseId} ---`);
-
+        
         pathArray.forEach(coord => {
             const match = coord.match(/\((\d+),\s*(\d+)\)/);
             if (!match) return;
@@ -152,23 +139,56 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 6. FUNCIONES DEL EDITOR ---
 
     /**
+     * (NUEVA FUNCIÓN)
+     * Pide el grid PREDETERMINADO al servidor y lo dibuja
+     */
+    async function resetToDefault() {
+        console.log("--- DEBUG: resetToDefault() FUE LLAMADA ---"); // Para depurar
+        try {
+            console.log("Botón 'Reiniciar' presionado. Pidiendo grid PREDETERMINADO...");
+            if (saveStatus) saveStatus.textContent = ''; 
+            
+            // Llama a la nueva URL que creamos en el servidor
+            const response = await fetch('/api/grid/default'); 
+            
+            if (!response.ok) {
+                throw new Error(`Error del servidor al cargar grid predeterminado: ${response.status}`);
+            }
+            cuartoTemplate = await response.json(); // Carga el grid predeterminado
+            console.log("Grid predeterminado recibido.", cuartoTemplate);
+
+            rows = cuartoTemplate.length;
+            cols = cuartoTemplate[0].length;
+
+            allGrids.forEach(container => {
+                if (container) {
+                    container.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
+                    drawGrid(container);
+                }
+            });
+
+            if (gridEditor) {
+                gridEditor.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
+                drawGrid(gridEditor);
+            }
+
+        } catch (error) {
+            console.error("Error al reiniciar el grid:", error);
+            if (saveStatus) saveStatus.textContent = "Error al reiniciar.";
+        }
+    }
+
+    /**
      * Maneja el clic en el grid del editor
      */
     function handleGridClick(e) {
-        // Solo reacciona si se hizo clic en una CELDA
         if (!e.target.classList.contains('cell')) return;
-
-        // --- ¡LÓGICA CAMBIADA! ---
-        // Lee las coordenadas directamente desde los data attributes
         const y = parseInt(e.target.dataset.y, 10);
         const x = parseInt(e.target.dataset.x, 10);
-        // -------------------------
-
         if (isNaN(y) || isNaN(x)) {
             console.error("No se pudieron leer las coordenadas de la celda", e.target);
             return;
         }
-
         updateLocalGrid(y, x, currentBrush);
     }
 
@@ -176,15 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * Actualiza el array 'cuartoTemplate' local y la celda visual
      */
     function updateLocalGrid(y, x, brush) {
-        // Si es S o M, primero borra el S o M anterior
         if (brush === 'S' || brush === 'M') {
             findAndRemove(brush);
         }
-
-        // Actualiza el array local
         cuartoTemplate[y][x] = brush;
 
-        // Redibuja TODOS los grids para que estén sincronizados
         allGrids.forEach(container => {
             if (container) drawGrid(container);
         });
@@ -198,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let y = 0; y < rows; y++) {
             for (let x = 0; x < cols; x++) {
                 if (cuartoTemplate[y][x] === charToRemove) {
-                    cuartoTemplate[y][x] = '.'; // Borra el anterior
+                    cuartoTemplate[y][x] = '.';
                     return;
                 }
             }
@@ -216,17 +232,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(cuartoTemplate), // Envía el grid local al servidor
+                body: JSON.stringify(cuartoTemplate), 
             });
 
             if (!response.ok) {
                 throw new Error('Error del servidor al guardar.');
             }
-
             const result = await response.json();
-            cuartoTemplate = result.grid; // Sincroniza con la respuesta
+            cuartoTemplate = result.grid; 
             
-            // Redibuja todo con el grid confirmado por el servidor
             allGrids.forEach(container => {
                 if (container) drawGrid(container);
             });
@@ -242,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 7. EVENT LISTENERS ---
 
-    // Listeners de Algoritmos
+    // (Listeners de algoritmos - Sin cambios)
     runButtonBFS.addEventListener('click', async () => {
         console.log("PASO 2: Botón 'Ejecutar BFS' presionado.");
         generatedResultBFS.textContent = 'Ejecutando...';
@@ -344,6 +358,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Listeners del Editor
+    if (gridEditor) {
+        gridEditor.addEventListener('click', handleGridClick);
+    }
+    
     brushRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
             currentBrush = e.target.value;
@@ -351,6 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     saveButton.addEventListener('click', handleSaveGrid);
+    
+    // --- ¡CAMBIO IMPORTANTE AQUÍ! ---
+    // El botón de reinicio ahora llama a la nueva función
+    if (resetButton) {
+        resetButton.addEventListener('click', resetToDefault);
+    }
 
     // --- 8. INICIO DE LA APLICACIÓN ---
     inicializarGrid();
