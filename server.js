@@ -1,24 +1,24 @@
 const express = require('express');
 const path = require('path');
-
-// 1. Importa TODOS tus algoritmos
-const { astar, Node } = require('./Astar.js'); // Asume que Node se exporta desde astar.js
+const { astar, Node } = require('./Astar.js');
 const { bfs } = require('./amplitud.js');
 const { dfs } = require('./profundidad.js');
 const { bestFirstSearch } = require('./primeromejor.js');
 
+// --- PASO 1: Importa el laberinto desde el archivo maestro ---
+const cuartoTemplate = require('./laberinto.js');
+
 const app = express();
 const PORT = 3003;
 
-// 2. Sirve tu front-end (la carpeta 'public' donde estarán index.html y script.js)
 app.use(express.static('public'));
 
-// 3. Define el laberinto en el servidor
-const cuartoTemplate = [
-    [".", ".", "."], [".", "#", "."], ["S", "#", "."],
-    ["#", ".", "."], [".", ".", "#"], [".", "M", "."]
-];
+// --- PASO 2: Nueva API para que el frontend pida el laberinto ---
+app.get('/api/grid', (req, res) => {
+    res.json(cuartoTemplate);
+});
 
+// Esta función ahora usa el 'cuartoTemplate' importado
 function crearGrid() {
     const rows = cuartoTemplate.length;
     const cols = cuartoTemplate[0].length;
@@ -34,7 +34,7 @@ function crearGrid() {
     return { grid, startNode, endNode };
 }
 
-// 4. Crea la API para que el front-end la llame
+// La API para correr los algoritmos (sin cambios)
 app.get('/api/run/:algorithm', (req, res) => {
     const { algorithm } = req.params;
     console.log(`Petición recibida para ejecutar: ${algorithm}`);
@@ -59,7 +59,7 @@ app.get('/api/run/:algorithm', (req, res) => {
             return res.status(400).json({ error: 'Algoritmo no válido' });
     }
     
-    res.json(result); // Envía el resultado como JSON al navegador
+    res.json(result);
 });
 
 app.listen(PORT, () => {
