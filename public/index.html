@@ -35,13 +35,14 @@
 						<nav>
 							<ul>
 								<li><a href="#problema">problema</a></li>
-								<li><a href="#comparativa">comparativa</a></li>
+								<li><a href="#editor">editor</a></li>
 								<li><a href="#about">about</a></li>
 							</ul>
 						</nav>
 						<nav>
 							<ul>
 								<li><a href="#ciegas">ciegas</a></li>
+								<li><a href="#elements">elements</a></li>
 								<li><a href="#heuristicas">heuristicas</a></li>
 							</ul>
 						</nav>
@@ -69,6 +70,7 @@
 							<article id="ciegas">
 								<h1 class="major">Amplitud</h1>
 								<div class="controls">
+									<a href="#codigo-amplitud" class="button" style="margin-top: 20px;">Ver código Amplitud</a>
 									<button id="run-bfs-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-bfs" class="grid-display"></div>
@@ -81,6 +83,7 @@
 
 								<h1 class="major" style="margin-top: 50px;">Profundidad</h1>
 								<div class="controls">
+									<a href="#codigo-profundidad" class="button" style="margin-top: 20px;">Ver código Profundidad</a>
 									<button id="run-dfs-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-dfs" class="grid-display"></div>
@@ -96,6 +99,7 @@
 							<article id="heuristicas">
 								<h1 class="major">A*</h1>
 								<div class="controls">
+									<a href="#codigo-astar" class="button" style="margin-top: 20px;">Ver código A*</a>
 									<button id="run-astar-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-astar" class="grid-display"></div>
@@ -108,6 +112,7 @@
 
 								<h1 class="major" style="margin-top: 50px;">Primero el Mejor</h1>
 								<div class="controls">
+									<a href="#codigo-bestfirst" class="button" style="margin-top: 20px;">Ver código Primero el Mejor</a>
 									<button id="run-bestfirst-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-bestfirst" class="grid-display"></div>
@@ -119,16 +124,201 @@
 								</div>
 							</article>
 
+							<article id="editor">
+								<h1 class="major">Editor de Laberinto</h1>
+								<p>Selecciona una herramienta y haz clic en la cuadrícula para modificar el laberinto.</p>
+
+								<div class="editor-tools">
+									<input type="radio" id="brush-wall" name="brush" value="#" checked>
+									<label for="brush-wall">Pared (Obstáculo)</label>
+
+									<input type="radio" id="brush-start" name="brush" value="S">
+									<label for="brush-start">Inicio (S)</label>
+
+									<input type="radio" id="brush-end" name="brush" value="M">
+									<label for="brush-end">Meta (M)</label>
+
+									<input type="radio" id="brush-erase" name="brush" value=".">
+									<label for="brush-erase">Borrar (Piso)</label>
+								</div>
+
+								<div id="grid-editor" class="grid-display"></div>
+
+								<div class="controls" style="margin-top: 20px;">
+									<button id="save-grid-btn">Aplicar Cambios</button>
+									<p id="save-status"></p>
+								</div>
+							</article>
+
 							<!-- About -->
 							<article id="about">
 								<h2 class="major">About</h2>
-								<p>Por David Pinto y Vanessa Reyes.</p>
+								<h3>Por Pinto Santillán Luis David y Reyes HVanessa Reyes.</p>
 								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 								<ul class="icons">
 									<li><a href="https://www.instagram.com/david_mozzafiato/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
 									<li><a href="https://github.com/davidmozzafiato" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="https://github.com/gigiwi" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 								</ul>
 							</article>
+
+						<!-- Código Amplitud -->
+							<article id="codigo-amplitud">
+								<h2 class="major">Código Amplitud</h2>
+							<pre><code>
+class Node {
+    constructor(x, y, isWall = false) {
+        this.x = x; this.y = y; this.isWall = isWall; this.parent = null;
+    }
+}
+
+function bfs(grid, start, end) {
+    const generatedStates = [];
+    const queue = [];
+    const visited = new Set();
+
+    queue.push(start);
+    visited.add(start);
+    generatedStates.push(start);
+
+    while (queue.length > 0) {
+        const currentNode = queue.shift();
+
+        if (currentNode === end) {
+            const path = reconstructPath(currentNode);
+            return {
+                generated: generatedStates.map(n => `(${n.y}, ${n.x})`),
+                visited: Array.from(visited).map(n => `(${n.y}, ${n.x})`),
+                path: path.map(p => `(${p.y}, ${p.x})`)
+            };
+        }
+
+        const neighbors = getNeighbors(grid, currentNode);
+        for (const neighbor of neighbors) {
+            if (!visited.has(neighbor) && !neighbor.isWall) {
+                visited.add(neighbor);
+                neighbor.parent = currentNode;
+                queue.push(neighbor);
+                generatedStates.push(neighbor);
+            }
+        }
+    }
+    return null;
+}
+
+function getNeighbors(grid, node) {
+    const neighbors = [];
+    const { x, y } = node;
+    const rows = grid.length;
+    const cols = grid[0].length;
+    if (y > 0) neighbors.push(grid[y - 1][x]);
+    if (y < rows - 1) neighbors.push(grid[y + 1][x]);
+    if (x > 0) neighbors.push(grid[y][x - 1]);
+    if (x < cols - 1) neighbors.push(grid[y][x + 1]);
+    return neighbors;
+}
+
+function reconstructPath(endNode) {
+    const path = [];
+    let currentNode = endNode;
+    while (currentNode !== null) { path.unshift(currentNode); currentNode = currentNode.parent; }
+    return path;
+}
+							</code></pre>
+								</article>
+
+						<!-- Código Profundidad -->
+							<article id="codigo-profundidad">
+								<h2 class="major">Código Profundidad</h2>
+								<pre><code
+									class="visor-codigo language-javascript"
+									id="visor-2"
+									data-src="assets/js/profundidad.js">
+								</code></pre>
+							</article>
+
+							<article id="codigo-astar">
+								<h2 class="major">Código A*</h2>
+							<pre><code>
+class Node {
+    constructor(x, y, isWall = false) {
+        this.x = x; this.y = y; this.isWall = isWall;
+        this.g = Infinity; this.h = 0; this.f = Infinity;
+        this.parent = null;
+    }
+}
+
+function heuristic(nodeA, nodeB) {
+    return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
+}
+
+function astar(grid, start, end) {
+    const generatedStates = [];
+    const openSet = new TinyQueue([], (a, b) => a.f - b.f);
+    const closedSet = new Set();
+    
+    start.g = 0;
+    start.h = heuristic(start, end);
+    start.f = start.g + start.h;
+    openSet.push(start);
+    generatedStates.push(start);
+    
+    while (openSet.length > 0) {
+        const currentNode = openSet.pop();
+
+        if (currentNode === end) {
+            const path = reconstructPath(currentNode);
+            return {
+                generated: generatedStates.map(n => `(${n.y}, ${n.x})`),
+                visited: Array.from(closedSet).map(n => `(${n.y}, ${n.x})`).concat(`(${end.y}, ${end.x})`),
+                path: path.map(p => `(${p.y}, ${p.x})`)
+            };
+        }
+        
+        closedSet.add(currentNode);
+
+        const neighbors = getNeighbors(grid, currentNode);
+        for (const neighbor of neighbors) {
+            if (closedSet.has(neighbor) || neighbor.isWall) continue;
+            
+            const tentativeG = currentNode.g + 1;
+
+            if (tentativeG < neighbor.g) {
+                neighbor.parent = currentNode;
+                neighbor.g = tentativeG;
+                neighbor.h = heuristic(neighbor, end);
+                neighbor.f = neighbor.g + neighbor.h;
+                
+                if (!openSet.data.some(node => node === neighbor)) {
+                    openSet.push(neighbor);
+                    generatedStates.push(neighbor);
+                }
+            }
+        }
+    }
+    return null;
+}
+
+function getNeighbors(grid, node) {
+    const neighbors = [];
+    const { x, y } = node;
+    const rows = grid.length;
+    const cols = grid[0].length;
+    if (y > 0) neighbors.push(grid[y - 1][x]);
+    if (y < rows - 1) neighbors.push(grid[y + 1][x]);
+    if (x > 0) neighbors.push(grid[y][x - 1]);
+    if (x < cols - 1) neighbors.push(grid[y][x + 1]);
+    return neighbors;
+}
+
+function reconstructPath(endNode) {
+    const path = [];
+    let currentNode = endNode;
+    while (currentNode !== null) { path.unshift(currentNode); currentNode = currentNode.parent; }
+    return path;
+}
+								</code></pre>
+								</article>
 
 						<!-- Elements -->
 							<article id="elements">
@@ -390,6 +580,8 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
-	</body>
+			<script src="assets/js/cargadorAutomatico.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+			</body>
 </html>

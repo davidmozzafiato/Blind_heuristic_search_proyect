@@ -4,19 +4,35 @@ const { astar, Node } = require('./Astar.js');
 const { bfs } = require('./amplitud.js');
 const { dfs } = require('./profundidad.js');
 const { bestFirstSearch } = require('./primeromejor.js');
-
-// --- PASO 1: Importa el laberinto desde el archivo maestro ---
-const cuartoTemplate = require('./laberinto.js');
+let cuartoTemplate = require('./laberinto.js');
 
 const app = express();
 const PORT = 3003;
 
+// ...
 app.use(express.static('public'));
+app.use(express.json()); // <-- AÑADE ESTO (¡MUY IMPORTANTE!)
 
-// --- PASO 2: Nueva API para que el frontend pida el laberinto ---
+// La API para que el frontend pida el laberinto (sin cambios)
 app.get('/api/grid', (req, res) => {
     res.json(cuartoTemplate);
 });
+
+// --- AÑADE ESTA NUEVA RUTA 'POST' ---
+app.post('/api/grid', (req, res) => {
+    const nuevoTemplate = req.body;
+
+    if (nuevoTemplate && Array.isArray(nuevoTemplate)) {
+        // Actualiza el laberinto EN MEMORIA
+        cuartoTemplate = nuevoTemplate; 
+        console.log("Laberinto actualizado en el servidor:", cuartoTemplate);
+        // Envía el laberinto actualizado de vuelta al cliente
+        res.json({ status: 'ok', grid: cuartoTemplate });
+    } else {
+        res.status(400).json({ error: 'Datos de grid inválidos' });
+    }
+});
+// -------------------------------------
 
 // Esta función ahora usa el 'cuartoTemplate' importado
 function crearGrid() {
@@ -65,3 +81,4 @@ app.get('/api/run/:algorithm', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
+
