@@ -59,45 +59,4 @@ function reconstructPath(endNode) {
     return path;
 }
 
-/*
-// --- Ejemplo de Uso ---
-const cuartoTemplate = [
-    [".", ".", "."], [".", "#", "."], ["S", "#", "."],
-    ["#", ".", "."], [".", ".", "#"], [".", "M", "."]
-];
-const rows = cuartoTemplate.length;
-const cols = cuartoTemplate[0].length;
-const grid = Array.from({ length: rows }, (_, y) => Array.from({ length: cols }, (_, x) => new Node(x, y)));
-let startNode, endNode;
-for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-        if (cuartoTemplate[y][x] === '#') grid[y][x].isWall = true;
-        if (cuartoTemplate[y][x] === 'S') startNode = grid[y][x];
-        if (cuartoTemplate[y][x] === 'M') endNode = grid[y][x];
-    }
-}
-
-
-const result = bfs(grid, startNode, endNode);
-
-if (result) {
-    console.log("*** Búsqueda en Amplitud *****************");
-    console.log("Estados creados:", result.generated);
-    console.log("Estados visitados:", result.visited);
-    console.log("Ruta solucion:", result.path);
-
-    const pathSet = new Set(result.path.map(p => p.replace(/[() ]/g, '')));
-    for (let y = 0; y < rows; y++) {
-        let rowStr = "";
-        for (let x = 0; x < cols; x++) {
-            const id = `${y},${x}`;
-            if (grid[y][x].isWall) { rowStr += " # "; }
-            else if (pathSet.has(id)) { rowStr += " * "; }
-            else { rowStr += " . "; }
-        }
-        console.log(rowStr);
-    }
-} else { console.log("No se encontró un camino."); }
-*/
-
 module.exports = { bfs, Node, getNeighbors, reconstructPath };

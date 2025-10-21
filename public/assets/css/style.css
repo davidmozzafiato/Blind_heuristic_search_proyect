@@ -2,3 +2,60 @@
 .path {
     background-color: #ffeb3b; /* Amarillo para el estado final de la ruta */
 }
+
+/* --- INICIO DE NUEVOS ESTILOS --- */
+
+/* 1. Centra el botón de "Ejecutar algoritmo" */
+.controls {
+	text-align: center;
+	margin-bottom: 1.5rem; /* Añade espacio debajo del botón, antes del grid */
+}
+
+/* 2. Separa los resultados del grid de arriba */
+.results {
+	margin-top: 2rem; /* Esta es la separación que pediste */
+
+	/* 3. Estilo de contenedor de terminal */
+	background-color: #0d0d0d; /* Negro de terminal */
+	border-radius: 8px; /* Esquinas redondeadas */
+	padding: 1.5rem; /* Espacio interno */
+	border: 1px solid #333; /* Borde sutil */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+/* 3.1 Ajusta el título "RESULTADOS:" dentro de la terminal */
+.results h3 {
+	color: #ffffff; /* Título en blanco */
+	border-bottom: 1px solid #444;
+	padding-bottom: 0.5rem;
+	margin-bottom: 1.5rem;
+	letter-spacing: 0.1rem;
+}
+
+/* 3.2 Ajusta las etiquetas (ej. "Estados Creados:") */
+.results strong {
+	color: #ffffff; /* Texto en blanco para las etiquetas */
+	font-weight: 600;
+}
+
+/* 3.3 Ajusta los párrafos dentro de la terminal */
+.results p {
+	margin-bottom: 0.5rem; /* Reduce el espacio entre líneas */
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+/* 3.4 Sobrescribe el estilo anterior de 'span' para que funcione DENTRO de la terminal */
+.results span {
+	font-family: 'Courier New', Courier, monospace; /* Mantiene la fuente */
+	background-color: transparent; /* QUITA el fondo negro que tenía antes */
+	color: #00c241; /* Un verde neón más brillante para los datos */
+	padding: 0 4px; /* Un padding ligero horizontal */
+	border-radius: 0; /* Quita el redondeo que tenía */
+	font-weight: 550;
+	min-width: 0; /* Resetea esto */
+	text-align: left; /* Se ve más natural alineado a la izquierda */
+	font-size: 1.1rem; /* Un poco más grande para que resalte */
+}
+
+/* --- FIN DE NUEVOS ESTILOS --- */

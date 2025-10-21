@@ -8,7 +8,7 @@ const { dfs } = require('./profundidad.js');
 const { bestFirstSearch } = require('./primeromejor.js');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3003;
 
 // 2. Sirve tu front-end (la carpeta 'public' donde estarán index.html y script.js)
 app.use(express.static('public'));
