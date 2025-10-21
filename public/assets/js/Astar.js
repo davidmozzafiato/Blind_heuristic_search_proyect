@@ -1,4 +1,6 @@
-const TinyQueue = require('tinyqueue').default;
+import {getNeighbors} from './addFunc.js';
+import {reconstructPath} from './addFunc.js';
+import TinyQueue from 'tinyqueue';
 
 class Node {
     constructor(x, y, isWall = false) {
@@ -16,13 +18,11 @@ function astar(grid, start, end) {
     const generatedStates = [];
     const openSet = new TinyQueue([], (a, b) => a.f - b.f);
     const closedSet = new Set();
-    
     start.g = 0;
     start.h = heuristic(start, end);
     start.f = start.g + start.h;
     openSet.push(start);
     generatedStates.push(start);
-    
     while (openSet.length > 0) {
         const currentNode = openSet.pop();
 
@@ -34,13 +34,11 @@ function astar(grid, start, end) {
                 path: path.map(p => `(${p.y}, ${p.x})`)
             };
         }
-        
         closedSet.add(currentNode);
 
         const neighbors = getNeighbors(grid, currentNode);
         for (const neighbor of neighbors) {
             if (closedSet.has(neighbor) || neighbor.isWall) continue;
-            
             const tentativeG = currentNode.g + 1;
 
             if (tentativeG < neighbor.g) {
@@ -48,7 +46,6 @@ function astar(grid, start, end) {
                 neighbor.g = tentativeG;
                 neighbor.h = heuristic(neighbor, end);
                 neighbor.f = neighbor.g + neighbor.h;
-                
                 if (!openSet.data.some(node => node === neighbor)) {
                     openSet.push(neighbor);
                     generatedStates.push(neighbor);
@@ -59,23 +56,4 @@ function astar(grid, start, end) {
     return null;
 }
 
-function getNeighbors(grid, node) {
-    const neighbors = [];
-    const { x, y } = node;
-    const rows = grid.length;
-    const cols = grid[0].length;
-    if (x > 0) neighbors.push(grid[y][x - 1]);          // Izquierda
-    if (y > 0) neighbors.push(grid[y - 1][x]);          // Arriba
-    if (x < cols - 1) neighbors.push(grid[y][x + 1]);   // Derecha
-    if (y < rows - 1) neighbors.push(grid[y + 1][x]);   // Abajo
-    return neighbors;
-}
-
-function reconstructPath(endNode) {
-    const path = [];
-    let currentNode = endNode;
-    while (currentNode !== null) { path.unshift(currentNode); currentNode = currentNode.parent; }
-    return path;
-}
-
-module.exports = { astar, Node, getNeighbors, reconstructPath };
+export { astar, Node, getNeighbors, reconstructPath };
