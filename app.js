@@ -3,7 +3,7 @@ const path = require('path'); // Módulo de Node para trabajar con rutas de arch
 
 // Crear una instancia de la aplicación
 const app = express();
-const PORT = 3003;
+const PORT = 3005;
 
 // ----- MIDDLEWARE CLAVE -----
 // Esto le dice a Express que sirva todos los archivos estáticos

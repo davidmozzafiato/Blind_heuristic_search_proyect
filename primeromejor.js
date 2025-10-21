@@ -77,7 +77,7 @@ function reconstructPath(endNode) {
     return path;
 }
 
-/*
+///*
 // Definición del cuarto
 const cuartoTemplate = [
     [".", ".", "."],
@@ -131,6 +131,6 @@ if (result) {
 } else {
     console.log("No se encontró un camino.");
 }
-*/
+//*/
 
 module.exports = { bestFirstSearch, Node, getNeighbors, reconstructPath };

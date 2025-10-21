@@ -28,23 +28,21 @@
 						</div>
 						<div class="content">
 							<div class="inner">
-								<h1>Búsquedas ciegas</h1>
-								<p>Algoritmo A* implementado en JavaScript<br /></p>
+								<h1>Búsquedas</h1>
+								<p>Algoritmos de búsqueda implementados en Node JS<br /></p>
 							</div>
 						</div>
 						<nav>
 							<ul>
 								<li><a href="#problema">problema</a></li>
 								<li><a href="#comparativa">comparativa</a></li>
-								<li><a href="#contact">contacto</a></li>
+								<li><a href="#about">about</a></li>
 							</ul>
 						</nav>
 						<nav>
 							<ul>
-								<li><a href="#amplitud">Amplitud</a></li>
-								<li><a href="#profundidad">Profundidad</a></li>
-								<li><a href="#astar">A*</a></li>
-								<li><a href="#primero-el-mejor">Primero el mejor</a></li>
+								<li><a href="#ciegas">ciegas</a></li>
+								<li><a href="#heuristicas">heuristicas</a></li>
 							</ul>
 						</nav>
 					</header>
@@ -67,8 +65,8 @@
 								LA heurística es la distancia de Manhattan</p>
 								</article>
 
-						<!-- Amplitud -->
-							<article id="amplitud">
+						<!-- Ciegas -->
+							<article id="ciegas">
 								<h1 class="major">Amplitud</h1>
 								<div class="controls">
 									<button id="run-bfs-btn">Ejecutar algoritmo</button>
@@ -80,23 +78,22 @@
 									<p><strong>Estados Visitados:</strong> <span id="visited-result-bfs">-</span></p>
 									<p><strong>Ruta Solución:</strong> <span id="path-result-bfs">-</span></p>
 								</div>
-							</article>
 
-							<!-- Profundidad -->
-							<article id="profundidad">
-								<h1 class="major">Profundidad</h1>
+								<h1 class="major" style="margin-top: 50px;">Profundidad</h1>
 								<div class="controls">
 									<button id="run-dfs-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="path-result-dfs"></p>
+									<p><strong>Estados Creados:</strong> <span id="generated-result-dfs">-</span></p>
+									<p><strong>Estados Visitados:</strong> <span id="visited-result-dfs">-</span></p>
+									<p><strong>Ruta Solución:</strong> <span id="path-result-dfs">-</span></p>
 								</div>
 							</article>
 
-							<!-- Astar -->
-							<article id="astar">
+							<!-- Heuristicas -->
+							<article id="heuristicas">
 								<h1 class="major">A*</h1>
 								<div class="controls">
 									<button id="run-astar-btn">Ejecutar algoritmo</button>
@@ -104,53 +101,29 @@
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="path-result-astar"></p>
+									<p><strong>Estados Creados:</strong> <span id="generated-result-astar">-</span></p>
+									<p><strong>Estados Visitados:</strong> <span id="visited-result-astar">-</span></p>
+									<p><strong>Ruta Solución:</strong> <span id="path-result-astar">-</span></p>
 								</div>
-							</article>
 
-							<!-- Primero el mejor -->
-							<article id="primero-el-mejor">
-								<h1 class="major">Primero el Mejor</h1>
+								<h1 class="major" style="margin-top: 50px;">Primero el Mejor</h1>
 								<div class="controls">
 									<button id="run-bestfirst-btn">Ejecutar algoritmo</button>
 								</div>
 								<div id="grid-container"></div>
 								<div class="results">
 									<h3>Resultados:</h3>
-									<p id="path-result-bestfirst"></p>
+									<p><strong>Estados Creados:</strong> <span id="generated-result-bestfirst">-</span></p>
+									<p><strong>Estados Visitados:</strong> <span id="visited-result-bestfirst">-</span></p>
+									<p><strong>Ruta Solución:</strong> <span id="path-result-bestfirst">-</span></p>
 								</div>
 							</article>
 
-						<!-- About -->
+							<!-- About -->
 							<article id="about">
 								<h2 class="major">About</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 								<p>Por David Pinto y Vanessa Reyes.</p>
-							</article>
-
-						<!-- Contact -->
-							<article id="contact">
-								<h2 class="major">Contact</h2>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="4"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Reset" /></li>
-									</ul>
-								</form>
+								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
 								<ul class="icons">
 									<li><a href="https://www.instagram.com/david_mozzafiato/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
 									<li><a href="https://github.com/davidmozzafiato" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
