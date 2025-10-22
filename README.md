@@ -17,6 +17,9 @@ Se hizo uso de herramientas de frontend como HTML y CSS, también de backend com
 
 ## Ejecución del proyecto
 
+> [!IMPORTANT]
+> Es necesario instalar [Node.js](https://nodejs.org/es/download)
+
 ### Terminal 1
 
 > [!NOTE]
