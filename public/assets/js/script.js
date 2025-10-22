@@ -42,8 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 throw new Error(`Error del servidor al cargar grid: ${response.status}`);
             }
-            cuartoTemplate = await response.json();
-            console.log("PASO 3: Grid recibido del servidor.", cuartoTemplate);
+            const responseData = await response.json();
+            cuartoTemplate = responseData.default || responseData;
+            console.log("PASO 3: Grid recibido (después de extraer .default).", cuartoTemplate);
+            // Validamos si el grid guardado está vacío o no es un array
+            if (!cuartoTemplate || !Array.isArray(cuartoTemplate) || cuartoTemplate.length === 0) {
+                console.warn("Grid guardado está vacío o es inválido. Cargando grid predeterminado...");
+                const defaultResponse = await fetch('/api/grid/default');
+                if (!defaultResponse.ok) {
+                    throw new Error(`Error al cargar grid predeterminado: ${defaultResponse.status}`);
+                }
+                const defaultData = await defaultResponse.json();
+                cuartoTemplate = defaultData.default || defaultData;
+                console.log("PASO 3.5: Grid predeterminado cargado (después de extraer .default).", cuartoTemplate);
+                // Si el predeterminado TAMBIÉN falla...
+                if (!cuartoTemplate || !Array.isArray(cuartoTemplate) || cuartoTemplate.length === 0) {
+                    throw new Error("Fallo crítico: El grid predeterminado también está vacío o es inválido.");
+                }
+            }
             rows = cuartoTemplate.length;
             cols = cuartoTemplate[0].length;
             allGrids.forEach(container => {
@@ -56,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 gridEditor.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
                 drawGrid(gridEditor);
             }
-
         } catch (error) {
             console.error("Error fatal al inicializar el grid:", error);
         }
