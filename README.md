@@ -40,7 +40,7 @@ make dev
 ### Terminal 2
 
 > [!WARNING]
-> Es necesario usar otra terminal distinta a la de arriba para evitar que se cierre el servidor
+> Es necesario usar otra terminal distinta a la terminal 1 para evitar que se cierre el servidor
 
 #### Abrir el servidor
 
