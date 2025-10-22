@@ -1,21 +1,17 @@
-/* Puedes eliminar la clase .visited y la animación @keyframes pop si lo deseas */
 .path {
     background-color: #ffeb3b; /* Amarillo para el estado final de la ruta */
 }
 
-/* --- INICIO DE NUEVOS ESTILOS --- */
-
-/* 1. Centra el botón de "Ejecutar algoritmo" */
+/* Centra el botón de "Ejecutar algoritmo" */
 .controls {
 	text-align: center;
 	margin-bottom: 1.5rem; /* Añade espacio debajo del botón, antes del grid */
 }
 
-/* 2. Separa los resultados del grid de arriba */
+/* Separa los resultados del grid de arriba */
 .results {
-	margin-top: 2rem; /* Esta es la separación que pediste */
-
-	/* 3. Estilo de contenedor de terminal */
+	margin-top: 2rem;
+	/* Estilo de contenedor de terminal */
 	background-color: #0d0d0d; /* Negro de terminal */
 	border-radius: 8px; /* Esquinas redondeadas */
 	padding: 1.5rem; /* Espacio interno */
@@ -23,7 +19,7 @@
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
 }
 
-/* 3.1 Ajusta el título "RESULTADOS:" dentro de la terminal */
+/* Ajusta el título "RESULTADOS:" dentro de la terminal */
 .results h3 {
 	color: #ffffff; /* Título en blanco */
 	border-bottom: 1px solid #444;
@@ -32,35 +28,35 @@
 	letter-spacing: 0.1rem;
 }
 
-/* 3.2 Ajusta las etiquetas (ej. "Estados Creados:") */
+/* Ajusta las etiquetas (ej. "Estados Creados:") */
 .results strong {
 	color: #ffffff; /* Texto en blanco para las etiquetas */
 	font-weight: 600;
 }
 
-/* 3.3 Ajusta los párrafos dentro de la terminal */
+/* Ajusta los párrafos dentro de la terminal */
 .results p {
 	margin-bottom: 0.5rem; /* Reduce el espacio entre líneas */
 	font-size: 1rem;
 	line-height: 1.6;
 }
 
-/* 3.4 Sobrescribe el estilo anterior de 'span' para que funcione DENTRO de la terminal */
+/* Sobrescribe el estilo anterior de 'span' para que funcione DENTRO de la terminal */
 .results span {
-	font-family: 'Courier New', Courier, monospace; /* Mantiene la fuente */
-	background-color: transparent; /* QUITA el fondo negro que tenía antes */
-	color: #00c241; /* Un verde neón más brillante para los datos */
-	padding: 0 4px; /* Un padding ligero horizontal */
-	border-radius: 0; /* Quita el redondeo que tenía */
+	font-family: 'Courier New', Courier, monospace;
+	background-color: transparent;
+	color: #00c241;
+	padding: 0 4px;
+	border-radius: 0;
 	font-weight: 550;
-	min-width: 0; /* Resetea esto */
-	text-align: left; /* Se ve más natural alineado a la izquierda */
-	font-size: 1.1rem; /* Un poco más grande para que resalte */
+	min-width: 0;
+	text-align: left;
+	font-size: 1.1rem;
 }
 
-/* --------------------------------------------------------------------------------------- /*
+/* --------------------------------------------------------------------------------------- */
 
-/* 1. CONTENEDORES DEL GRID */
+/* CONTENEDORES DEL GRID */
 /* Esto aplica a los 4 divs: grid-bfs, grid-dfs, etc. */
 .grid-display {
     display: grid;
@@ -70,95 +66,78 @@
     /* script.js define el número de columnas y el ancho de 40px */
 }
 
-/* 2. CELDA BASE (LA MÁS IMPORTANTE) */
-/* Esto aplica a CADA celda de la cuadrícula */
 .cell {
     width: 40px;
     height: 40px;
-    
     /* Centra los círculos (::before) que dibujaremos dentro */
     display: flex;
     justify-content: center;
     align-items: center;
-    
     /* Limpieza de estilos de la plantilla */
     background-color: transparent !important;
     border-radius: 0 !important;
     transform: none !important;
-    
     /* Borde suave para que se vea la cuadrícula */
     box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.1);
-    
     /* Necesario para que z-index funcione */
-    position: relative; 
+    position: relative;
 }
 
-/* 3. OBSTÁCULOS (ROJO) */
+/* OBSTÁCULOS */
 .cell.wall {
-    background-color: rgba(178, 34, 34, 0.7) !important; /* Rojo ladrillo */
+    background-color: rgba(178, 34, 34, 0.7) !important;
     box-shadow: inset 0 0 0 1px rgba(139, 0, 0, 0.9);
     border-radius: 4px;
-    z-index: 5; /* Nivel de capa 5 */
+    z-index: 5;
 }
 
-/* 4. RUTA (VERDE) */
+/* RUTA */
 /* Dibuja la bola VERDE dentro de las celdas .path */
 .cell.path::before {
     content: ''; /* ¡Importante! Esto crea el elemento */
-    width: 25px; 
+    width: 25px;
     height: 25px;
-    background-color: rgba(76, 175, 80, 0.7) !important; /* Verde */
+    background-color: rgba(76, 175, 80, 0.7) !important;
     border-radius: 50%;
     box-shadow: 0 0 5px 1px rgba(76, 175, 80, 0.9);
-    
-    /* Nivel de capa 10 (Encima del muro, debajo de S y M) */
-    z-index: 10; 
+    z-index: 10;
 }
 
-/* 5. INICIO (S) Y DESTINO (M) */
+/* INICIO Y DESTINO */
 
 /* Base para los círculos de S y M */
 .cell.start::before,
 .cell.end::before {
-    /* --- ¡NUEVO! --- Configuración de Font Awesome --- */
-    /* Asegúrate de usar la familia de fuentes correcta */
-    font-family: "Font Awesome 6 Free", "Font Awesome 6 Solid"; 
-    /* 900 es el peso para los iconos sólidos */
-    font-weight: 900; 
-    
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Solid";
+    font-weight: 900;
     /* Crean el círculo y centran el icono */
     display: flex;
     justify-content: center;
     align-items: center;
-    
     width: 30px; 
     height: 30px;
     border-radius: 50%;
-    
-    /* Estilo del icono (ajustamos el tamaño) */
-    font-size: 0.9em; /* Un poco más pequeño que la letra */
+    /* Estilo del icono */
+    font-size: 0.9em;
     color: #ffffff;
-    
-    /* Nivel de capa 20 (¡Por encima de todo!) */
-    z-index: 20; 
+    z-index: 20;
 }
 
-/* Color e icono para INICIO (S) */
+/* Color e icono para INICIO  */
 .cell.start::before {
-    content: '\f04b'; /* --- ¡CAMBIADO! --- Icono de "play" */
+    content: '\f04b';
     background-color: rgba(65, 105, 225, 0.9) !important; /* Azul */
     box-shadow: 0 0 5px 1px rgba(65, 105, 225, 1);
 }
 
-/* Color e icono para DESTINO (M) */
+/* Color e icono para DESTINO  */
 .cell.end::before {
-    content: '\f11e'; /* --- ¡CAMBIADO! --- Icono de "bandera de meta" */
-    background-color: rgba(147, 112, 219, 0.9) !important; /* Morado */
+    content: '\f11e';
+    background-color: rgba(147, 112, 219, 0.9) !important;
     box-shadow: 0 0 5px 1px rgba(147, 112, 219, 1);
 }
 
-/* 6. LIMPIEZA DE CONFLICTOS */
-/* Oculta cualquier círculo (verde, azul, morado) si está en una pared */
+/* LIMPIEZA DE CONFLICTOS */
 .cell.wall::before {
     display: none !important;
 }

@@ -1,22 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("PASO 1: La página se ha cargado.");
-
-    // --- 1. SELECTORES DE GRID ---
+    // --- SELECTORES DE GRID ---
     const gridBFS = document.getElementById('grid-bfs');
     const gridDFS = document.getElementById('grid-dfs');
     const gridAStar = document.getElementById('grid-astar');
     const gridBestFirst = document.getElementById('grid-bestfirst');
     const allGrids = [gridBFS, gridDFS, gridAStar, gridBestFirst];
-
-    // --- 2. SELECTORES DEL EDITOR ---
+    // --- SELECTORES DEL EDITOR ---
     const gridEditor = document.getElementById('grid-editor');
     const saveButton = document.getElementById('save-grid-btn');
     const resetButton = document.getElementById('reset-grid-btn'); // Botón de reinicio
     const saveStatus = document.getElementById('save-status');
     const brushRadios = document.querySelectorAll('input[name="brush"]');
     let currentBrush = '#'; // Valor inicial (Pared)
-
-    // --- 3. SELECTORES DE BOTONES Y RESULTADOS ---
+    // --- SELECTORES DE BOTONES Y RESULTADOS ---
     const runButtonBFS = document.getElementById('run-bfs-btn');
     const generatedResultBFS = document.getElementById('generated-result-bfs');
     const visitedResultBFS = document.getElementById('visited-result-bfs');
@@ -33,37 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatedResultBestFirst = document.getElementById('generated-result-bestfirst');
     const visitedResultBestFirst = document.getElementById('visited-result-bestfirst');
     const pathResultBestFirst = document.getElementById('path-result-bestfirst');
-
-    // --- 4. VARIABLES GLOBALES ---
+    // --- VARIABLES GLOBALES ---
     let cuartoTemplate = null;
     let rows = 0;
     let cols = 0;
-
-    // --- 5. FUNCIONES DE LÓGICA PRINCIPAL ---
-
-    /**
-     * Pide el grid GUARDADO al servidor y luego lo dibuja
-     */
+    // --- FUNCIONES DE LÓGICA PRINCIPAL ---
     async function inicializarGrid() {
         try {
             console.log("PASO 2: Pidiendo grid GUARDADO al servidor...");
-            const response = await fetch('/api/grid'); // Pide el guardado
+            const response = await fetch('/api/grid');
             if (!response.ok) {
                 throw new Error(`Error del servidor al cargar grid: ${response.status}`);
             }
             cuartoTemplate = await response.json();
             console.log("PASO 3: Grid recibido del servidor.", cuartoTemplate);
-
             rows = cuartoTemplate.length;
             cols = cuartoTemplate[0].length;
-
             allGrids.forEach(container => {
                 if (container) {
                     container.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
                     drawGrid(container);
                 }
             });
-
             if (gridEditor) {
                 gridEditor.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
                 drawGrid(gridEditor);
@@ -79,29 +67,24 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function drawGrid(container) {
         if (!cuartoTemplate) return;
-        
         container.innerHTML = '';
         for (let y = 0; y < rows; y++) {
             for (let x = 0; x < cols; x++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 cell.id = `${container.id}-cell-${y}-${x}`;
-                
                 cell.dataset.y = y;
                 cell.dataset.x = x;
-                
                 const type = cuartoTemplate[y][x];
                 if (type === '#') cell.classList.add('wall');
                 if (type === 'S') cell.classList.add('start');
                 if (type === 'M') cell.classList.add('end');
-                
                 container.appendChild(cell);
             }
         }
     }
-
     /**
-     * Limpia la ruta visual (bolas verdes) de un grid
+     * Limpia la ruta visual de un grid
      */
     function clearPath(baseId) {
         const grid = document.getElementById(baseId);
@@ -111,23 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.classList.remove('path');
         });
     }
-
     /**
-     * Dibuja la ruta (bolas verdes) en un grid
+     * Dibuja la ruta en un grid
      */
     function drawPath(baseId, pathArray) {
         clearPath(baseId);
-        
         pathArray.forEach(coord => {
             const match = coord.match(/\((\d+),\s*(\d+)\)/);
             if (!match) return;
-            
             const y = match[1];
             const x = match[2];
-            
             const cellId = `${baseId}-cell-${y}-${x}`;
             const cell = document.getElementById(cellId);
-            
             if (cell) {
                 if (!cell.classList.contains('start') && !cell.classList.contains('end')) {
                     cell.classList.add('path');
@@ -135,49 +113,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // --- 6. FUNCIONES DEL EDITOR ---
-
+    // --- FUNCIONES DEL EDITOR ---
     /**
-     * (NUEVA FUNCIÓN)
      * Pide el grid PREDETERMINADO al servidor y lo dibuja
      */
     async function resetToDefault() {
-        console.log("--- DEBUG: resetToDefault() FUE LLAMADA ---"); // Para depurar
+        console.log("--- DEBUG: resetToDefault() FUE LLAMADA ---");
         try {
             console.log("Botón 'Reiniciar' presionado. Pidiendo grid PREDETERMINADO...");
             if (saveStatus) saveStatus.textContent = ''; 
-            
             // Llama a la nueva URL que creamos en el servidor
             const response = await fetch('/api/grid/default'); 
-            
             if (!response.ok) {
                 throw new Error(`Error del servidor al cargar grid predeterminado: ${response.status}`);
             }
             cuartoTemplate = await response.json(); // Carga el grid predeterminado
             console.log("Grid predeterminado recibido.", cuartoTemplate);
-
             rows = cuartoTemplate.length;
             cols = cuartoTemplate[0].length;
-
             allGrids.forEach(container => {
                 if (container) {
                     container.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
                     drawGrid(container);
                 }
             });
-
             if (gridEditor) {
                 gridEditor.style.gridTemplateColumns = `repeat(${cols}, 40px)`;
                 drawGrid(gridEditor);
             }
-
         } catch (error) {
             console.error("Error al reiniciar el grid:", error);
             if (saveStatus) saveStatus.textContent = "Error al reiniciar.";
         }
     }
-
     /**
      * Maneja el clic en el grid del editor
      */
@@ -191,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateLocalGrid(y, x, currentBrush);
     }
-
     /**
      * Actualiza el array 'cuartoTemplate' local y la celda visual
      */
@@ -200,13 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
             findAndRemove(brush);
         }
         cuartoTemplate[y][x] = brush;
-
         allGrids.forEach(container => {
             if (container) drawGrid(container);
         });
         if (gridEditor) drawGrid(gridEditor);
     }
-
     /**
      * Busca un carácter ('S' o 'M') en el grid local y lo borra (convierte en '.')
      */
@@ -220,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
     /**
      * Maneja el clic en el botón "Guardar"
      */
@@ -232,43 +196,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(cuartoTemplate), 
+                body: JSON.stringify(cuartoTemplate),
             });
-
             if (!response.ok) {
                 throw new Error('Error del servidor al guardar.');
             }
             const result = await response.json();
-            cuartoTemplate = result.grid; 
-            
+            cuartoTemplate = result.grid;
             allGrids.forEach(container => {
                 if (container) drawGrid(container);
             });
             if (gridEditor) drawGrid(gridEditor);
-
             saveStatus.textContent = '¡Laberinto guardado!';
             setTimeout(() => { saveStatus.textContent = ''; }, 3000);
-
         } catch (error) {
             saveStatus.textContent = `Error: ${error.message}`;
         }
     }
-
-    // --- 7. EVENT LISTENERS ---
-
-    // (Listeners de algoritmos - Sin cambios)
+    // --- EVENT LISTENERS ---
     runButtonBFS.addEventListener('click', async () => {
         console.log("PASO 2: Botón 'Ejecutar BFS' presionado.");
         generatedResultBFS.textContent = 'Ejecutando...';
         visitedResultBFS.textContent = 'Ejecutando...';
         pathResultBFS.textContent = 'Ejecutando...';
         clearPath('grid-bfs');
-
         try {
             const response = await fetch('/api/run/bfs');
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
             const result = await response.json();
-
             if (result && result.path) {
                 generatedResultBFS.textContent = result.generated.join(', ');
                 visitedResultBFS.textContent = result.visited.join(', ');
@@ -281,19 +236,16 @@ document.addEventListener('DOMContentLoaded', () => {
             pathResultBFS.textContent = `Error: ${error.message}`;
         }
     });
-
     runButtonDFS.addEventListener('click', async () => {
         console.log("PASO 2: Botón 'Ejecutar DFS' presionado.");
         generatedResultDFS.textContent = 'Ejecutando...';
         visitedResultDFS.textContent = 'Ejecutando...';
         pathResultDFS.textContent = 'Ejecutando...';
         clearPath('grid-dfs');
-
         try {
             const response = await fetch('/api/run/dfs');
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
             const result = await response.json();
-
             if (result && result.path) {
                 generatedResultDFS.textContent = result.generated.join(', ');
                 visitedResultDFS.textContent = result.visited.join(', ');
@@ -306,19 +258,16 @@ document.addEventListener('DOMContentLoaded', () => {
             pathResultDFS.textContent = `Error: ${error.message}`;
         }
     });
-
     runButtonAStar.addEventListener('click', async () => {
         console.log("PASO 2: Botón 'Ejecutar A*' presionado.");
         generatedResultAStar.textContent = 'Ejecutando...';
         visitedResultAStar.textContent = 'Ejecutando...';
         pathResultAStar.textContent = 'Ejecutando...';
         clearPath('grid-astar');
-
         try {
             const response = await fetch('/api/run/astar');
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
             const result = await response.json();
-
             if (result && result.path) {
                 generatedResultAStar.textContent = result.generated.join(', ');
                 visitedResultAStar.textContent = result.visited.join(', ');
@@ -331,19 +280,16 @@ document.addEventListener('DOMContentLoaded', () => {
             pathResultAStar.textContent = `Error: ${error.message}`;
         }
     });
-
     runButtonBestFirst.addEventListener('click', async () => {
         console.log("PASO 2: Botón 'Ejecutar Primero el Mejor' presionado.");
         generatedResultBestFirst.textContent = 'Ejecutando...';
         visitedResultBestFirst.textContent = 'Ejecutando...';
         pathResultBestFirst.textContent = 'Ejecutando...';
         clearPath('grid-bestfirst');
-
         try {
             const response = await fetch('/api/run/bestFirstSearch');
             if (!response.ok) throw new Error(`Error del servidor: ${response.status}`);
             const result = await response.json();
-
             if (result && result.path) {
                 generatedResultBestFirst.textContent = result.generated.join(', ');
                 visitedResultBestFirst.textContent = result.visited.join(', ');
@@ -356,27 +302,19 @@ document.addEventListener('DOMContentLoaded', () => {
             pathResultBestFirst.textContent = `Error: ${error.message}`;
         }
     });
-
     // Listeners del Editor
     if (gridEditor) {
         gridEditor.addEventListener('click', handleGridClick);
     }
-    
     brushRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
             currentBrush = e.target.value;
         });
     });
-
     saveButton.addEventListener('click', handleSaveGrid);
-    
-    // --- ¡CAMBIO IMPORTANTE AQUÍ! ---
-    // El botón de reinicio ahora llama a la nueva función
     if (resetButton) {
         resetButton.addEventListener('click', resetToDefault);
     }
-
-    // --- 8. INICIO DE LA APLICACIÓN ---
+    // --- INICIO DE LA APLICACIÓN ---
     inicializarGrid();
-
 });

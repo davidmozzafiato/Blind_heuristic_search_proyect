@@ -4,35 +4,20 @@ const { astar, Node } = require('./public/assets/js/Astar.js');
 const { bfs } = require('./public/assets/js/amplitud.js');
 const { dfs } = require('./public/assets/js/profundidad.js');
 const { bestFirstSearch } = require('./public/assets/js/primeromejor.js');
-
-// --- ¡CAMBIOS IMPORTANTES AQUÍ! ---
-
-// 1. Importa el laberinto predeterminado a una CONSTANTE (inmutable)
-//    (Asegúrate de que esta ruta a tu laberinto.js sea correcta)
 const defaultLaberinto = require('./public/assets/js/laberinto.js');
-
-// 2. Crea tu variable 'cuartoTemplate' (mutable) como una COPIA PROFUNDA
-//    Esto es VITAL para que no se modifique el original.
 let cuartoTemplate = JSON.parse(JSON.stringify(defaultLaberinto));
-
-// ------------------------------------
-
 const app = express();
 const PORT = 3003;
-
 app.use(express.static('public'));
-app.use(express.json()); // Correcto
-
-// API para pedir el laberinto (el ÚLTIMO GUARDADO)
+app.use(express.json());
+// API para pedir el laberinto
 app.get('/api/grid', (req, res) => {
-    // Envía la variable mutable (la que puede cambiar)
+    // Envía la variable mutable
     res.json(cuartoTemplate);
 });
-
 // API para GUARDAR un nuevo laberinto
 app.post('/api/grid', (req, res) => {
     const nuevoTemplate = req.body;
-
     if (nuevoTemplate && Array.isArray(nuevoTemplate)) {
         // Actualiza el laberinto EN MEMORIA
         cuartoTemplate = nuevoTemplate; 
@@ -42,19 +27,10 @@ app.post('/api/grid', (req, res) => {
         res.status(400).json({ error: 'Datos de grid inválidos' });
     }
 });
-
-// --- ¡ESTA ES LA RUTA QUE TE FALTA! ---
-/**
- * NUEVO ENDPOINT:
- * Ofrece el laberinto PREDETERMINADO (de laberinto.js)
- */
 app.get('/api/grid/default', (req, res) => {
     console.log("Enviando laberinto predeterminado...");
-    // Envía la constante original, que nunca cambia
     res.json(defaultLaberinto);
 });
-// ---------------------------------------------
-
 // Esta función usa 'cuartoTemplate' (el guardado) para correr los algoritmos
 function crearGrid() {
     const rows = cuartoTemplate.length;
@@ -70,15 +46,12 @@ function crearGrid() {
     }
     return { grid, startNode, endNode };
 }
-
-// API para correr los algoritmos (sin cambios)
+// API para correr los algoritmos
 app.get('/api/run/:algorithm', (req, res) => {
     const { algorithm } = req.params;
     console.log(`Petición recibida para ejecutar: ${algorithm}`);
-    
     const { grid, startNode, endNode } = crearGrid();
     let result;
-
     switch (algorithm) {
         case 'astar':
             result = astar(grid, startNode, endNode);
@@ -97,7 +70,6 @@ app.get('/api/run/:algorithm', (req, res) => {
     }
     res.json(result);
 });
-
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

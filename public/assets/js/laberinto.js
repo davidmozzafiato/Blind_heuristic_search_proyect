@@ -6,6 +6,4 @@ const cuartoTemplate = [
     [".", ".", "#"],
     [".", "M", "."]
 ];
-
-// Exporta el laberinto para que server.js pueda usarlo
-module.exports = cuartoTemplate;
+export default cuartoTemplate;
