@@ -6,8 +6,8 @@
 
 ## Integrantes del equipo
 
-* Pinto Santillán Luis David
-* Reyes Herrera Vanessa Giselle
+* [Pinto Santillán Luis David](https://github.com/davidmozzafiato)
+* [Reyes Herrera Vanessa Giselle](https://github.com/gigiwi)
 
 ## Descripción
 
