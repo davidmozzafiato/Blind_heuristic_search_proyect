@@ -15,6 +15,56 @@ Se elaboró la presente página con propósito de ilustrar visualmente el uso de
 
 Se hizo uso de herramientas de frontend como HTML y CSS, también de backend como Node js.
 
+## Guía de uso
+
+Una vez cargada la página web nos aparecerá la página de inicio, donde podremos acceder a los siguientes menús:
+
+* [Problema](#problema) (Descripción del problema a resolver).
+* [Editor](#editor) (Editar el incio, obstáculos y meta a resolver de los algoritmos).
+* [Equipo](#integrantes-del-equipo) (Información detallada de las personas encargadas del proyecto).
+* [Ciegas](#búsquedas-ciegas) (Búsqueda en Amplitud y Profundidad)
+* [Heurísticas](#búsquedas-heurísticas) (Búsqueda A* y Primero el mejor)
+
+![Página principal](/Images/1-MainPage.png)
+
+### Problema
+
+Aquí podemos ver con detalle la descripción del problema a solucionar.
+
+![Página principal](/Images/2-Problema.png)
+
+### Editor
+
+Somos libres de editar las paredes, el inicio y la meta; podemos agregarlas y eliminarlas.
+
+![Página principal](/Images/3-Editor.png)
+
+### Búsquedas ciegas
+
+Tenemos dos búsquedas disponibles, Amplitud y Profundidad; en ambos casos podemos visualizar por separado la salida tanto visual, como los datos tales como **Estados creados**, **Estados visitados** y la **Ruta solución**.
+
+Para correr el algoritmo basta con presionar **Ejecutar algoritmo** para poder ver la salida, si en dado caso les da curiosidad ver el código con el que está trabajando el algoritmo también está disponible el botón de **Ver código Amplitud**, estos botones están dispobibles para ambas búsquedas por separado.
+
+![Página principal](/Images/4-Amplitud.png)
+
+Aquí podemos visualizar el **resultado del algoritmo** luego de presionar en **Ejecutar algoritmo**.
+
+![Página principal](/Images/4-AmplitudRun.png)
+
+Con un poco más de detalle los **Estados** y la **Ruta solución** del problema predeterminado.
+
+![Página principal](/Images/4-AmplitudRunResults.png)
+
+### Búsquedas Heurísticas
+
+Funciona de igual manera que las [Búsquedas Ciegas](#búsquedas-ciegas).
+
+![Página principal](/Images/5-AStarRun.png)
+
+Salida de los **Estados** y la **Ruta solución** del problema predeterminado en A*(AStar).
+
+![Página principal](/Images/5-AStarRunResults.png)
+
 ## Ejecución del proyecto
 
 > [!IMPORTANT]
