@@ -25,7 +25,7 @@ Una vez cargada la página web nos aparecerá la página de inicio, donde podrem
 * [Ciegas](#búsquedas-ciegas) (Búsqueda en Amplitud y Profundidad)
 * [Heurísticas](#búsquedas-heurísticas) (Búsqueda A* y Primero el mejor)
 
-![Página principal](/Images/1-MainPage.png)
+![Página principal](https://raw.github.com/davidmozzafiato/Blind_heuristic_search_proyect/blob/main/Images/1-MainPage.png)
 
 ### Problema
 
